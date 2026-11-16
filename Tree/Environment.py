@@ -99,7 +99,7 @@ class Environment(Node):
         else:
             # create a new variable binding in the current frame
             new_binding = Cons(id, Cons(value, Nil.getInstance()))
-            self.frame = Cons(new_bindng, self.frame)
+            self.frame = Cons(new_binding, self.frame)
 
 # TODO: implement this function
     def assign(self, id, value):
