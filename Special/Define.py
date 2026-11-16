@@ -12,7 +12,7 @@ class Define(Special):
         pass
     
     def eval(self, t, env):
-        from Tree import Closure
+        from Tree.Closure import Closure
 
         args = t.getCdr()
         target = args.getCar()

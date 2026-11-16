@@ -11,7 +11,7 @@
 
 import sys
 from Tree import Node
-from Tree import Environment
+from Tree.Environment import Environment
 from Tree import Nil, Cons
 
 class Closure(Node):
