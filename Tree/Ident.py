@@ -1,24 +1,24 @@
 # Ident -- Parse tree node class for representing identifiers
 
-import sys
 from Tree import Node
+from Print import Printer
 
 class Ident(Node):
     def __init__(self, n):
         self.name = n
 
-    def isSymbol(self):
-        return True
+    def print(self, n, p=False):
+        Printer.printIdent(n, self.name)
 
     def getName(self):
         return self.name
+    
+    def eval(self, env):
+        #find identifiers value
+        return env.lookup(self)
 
-    def print(self, n, p=False):
-        if n >= 0:
-            sys.stdout.write(' ' * n)
-        sys.stdout.write(self.name)
-        if n >= 0:
-            sys.stdout.write('\n')
+    def isSymbol(self):
+        return True
 
 if __name__ == "__main__":
     id = Ident("foo")

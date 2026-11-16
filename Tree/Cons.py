@@ -4,6 +4,12 @@ from Tree import Node
 from Tree import Ident
 
 class Cons(Node):
+    util = None
+
+    @classmethod
+    def setUtil(cls, u):
+        cls.util = u
+
     def __init__(self, a, d):
         self.car = a
         self.cdr = d
@@ -18,18 +24,14 @@ class Cons(Node):
     # object from the Special hierarchy and to leave the rest of
     # parsing up to the interpreter.
     def parseList(self):
+        self.form = Cons.util.parseList(self)
 
-    # helper function parselist + defines the special forms and their corresponding classes
-        from Special import Quote, Lambda, Begin, If, Let, Cond, Define, Set, Regular
-        forms = {"quote": Quote, "lambda": Lambda, "begin": Begin, "if": If,
-                 "let": Let, "cond": Cond, "define": Define, "set!": Set}
-        if self.car.isSymbol() and self.car.name in forms:
-            self.form = forms[self.car.name]()
-        else:
-            self.form = Regular()
-
-    def isPair(self):
-        return True
+    def print(self, n, p=False):
+        self.form.print(self, n, p)
+    
+    def eval(self, env):
+        #pass the expression to associated special-form
+        return self.form.eval(self, env)
 
     def getCar(self):
         return self.car
@@ -44,8 +46,8 @@ class Cons(Node):
     def setCdr(self, d):
         self.cdr = d
 
-    def print(self, n, p=False):
-        self.form.print(self, n, p)
+    def isPair(self):
+        return True
 
 if __name__ == "__main__":
     c = Cons(Ident("Hello"), Ident("World"))

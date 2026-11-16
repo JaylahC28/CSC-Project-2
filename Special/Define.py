@@ -1,23 +1,39 @@
 # Define -- Parse tree node strategy for printing the special form define
 
-import sys
+from Tree import Ident
+from Tree import Nil
+from Tree import Cons
+#from Tree import Void
+from Print import Printer
 from Special import Special
 
 class Define(Special):
-    # TODO: Add fields and modify the constructor as needed.
     def __init__(self):
         pass
+    
+    def eval(self, t, env):
+        from Tree import Closure
+
+        args = t.getCdr()
+        target = args.getCar()
+        rest = args.getCdr()
+
+        if target.isSymbol():
+            value = rest.getCar().eval(env)
+            env.define(target, value)
+        else:
+            name = target.getCar()
+            parameters = target.getCdr()
+
+            lambda_expr = Cons(
+                Ident("lambda"),
+                Cons(parameters, rest)
+            )
+
+            closure = Closure(lambda_expr, env)
+            env.define(name, closure)
+
+        return Nil.getInstance()
 
     def print(self, t, n, p):
-        rest = t.getCdr()
-        if rest.isPair() and rest.getCar().isPair():
-            Special.printTwoOnFirstLine(t, n, p)
-        else:
-            m = abs(n)
-            if not p:
-                if n >= 0:
-                    Special.indent(m)
-                sys.stdout.write("(")
-            t.getCar().print(-(m + 2))
-            Special.printRest(rest, m)
-            sys.stdout.write("\n")
+        Printer.printDefine(t, n, p)

@@ -6,8 +6,8 @@ from Special.If import If
 from Special.Lambda import Lambda
 from Special.Let import Let
 from Special.Quote import Quote
-from Special.Regular import Regular
 from Special.Set import Set
+from Special.Regular import Regular
 
 __all__ = ["Special", "Begin", "Cond", "Define", "If", "Lambda", "Let",
-           "Quote", "Regular", "Set"]
+           "Quote", "Set", "Regular"]

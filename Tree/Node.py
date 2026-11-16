@@ -30,7 +30,7 @@ class Node(ABC):
     # evaluating them, we need some helper functions that test
     # the type of a node and that extract some information.
 
-    # TODO: implemented these in the appropriate subclasses to return true.
+    # These are implemented in the appropriate subclasses to return true.
     def isBool(self):           # BoolLit
         return False
     def isNumber(self):         # IntLit
@@ -45,27 +45,48 @@ class Node(ABC):
         return False
     def isProcedure(self):      # BuiltIn, Closure
         return False
+    def isEnvironment(self):    # Environment
+        return False
 
-    def getName(self):          # Ident
-        return None
-
-    # Only BuiltIn and Closure can be applied
-    def apply(self, args):
-        sys.stderr.write("Error: attempt to apply a non-procedure\n")
-        from Tree.Nil import Nil
-        return Nil.getInstance()
-
-    # TODO: Report an error in these default methods and implement them
+    # Report an error in these default methods and implement them
     # in class Cons.  After setCar, a Cons cell needs to be `parsed' again
     # using parseList.
     def getCar(self):
-        return None
+        from Tree import Nil
+        self._error("argument of car is not a pair")
+        return Nil.getInstance()
 
     def getCdr(self):
-        return None
+        from Tree import Nil
+        self._error("argument of cdr is not a pair")
+        return Nil.getInstance()
 
     def setCar(self, a):
-        pass
+        self._error("argument of set-car! is not a pair")
 
     def setCdr(self, d):
-        pass
+        self._error("argument of set-cdr! is not a pair")
+
+    def getName(self):
+        return ""
+
+    def eval(self, env):
+        if self.isNumber() or self.isBool() or self.isString():
+            return self
+
+        if self.isProcedure() or self.isNull():
+            return self
+
+        from Tree import Nil
+        self._error("cannot evaluate this node")
+        return Nil.getInstance()
+    
+    
+    def apply(self, args):
+        from Tree import Nil
+        self._error("attempt to call a non-procedure") #only procedures can be called as functions
+        return Nil.getInstance()
+
+    def _error(self, msg):
+        sys.stderr.write("Error: " + msg + "\n")
+        sys.stderr.flush()
