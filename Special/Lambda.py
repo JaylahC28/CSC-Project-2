@@ -1,6 +1,6 @@
 # Lambda -- Parse tree node strategy for printing the special form lambda
 
-from Tree import Closure
+from Tree.Closure import Closure
 from Print import Printer
 from Special import Special
 
